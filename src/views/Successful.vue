@@ -1,7 +1,7 @@
 <template>
-  <duv>
+  <div>
     <p>Your answers were submitted successfully</p>
-  </duv>
+  </div>
 </template>
 
 <script>

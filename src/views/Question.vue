@@ -4,14 +4,19 @@
     <ul li v-for="(question, index) in questions" :key="index">
       <div>
         {{question }}
-        <div @click='selectAnswer'>
-          <button value='1'>1</button>
-          <button value='2'>2</button>
-          <button value='3'>3</button>
+        <div>
+          <input type="radio" :name="question" value="1" v-model="answers[index].answer"> 1
+          <br>
+          <input type="radio" :name="question" value="2" v-model="answers[index].answer"> 2
+          <br>
+          <input type="radio" :name="question" value="3" v-model="answers[index].answer"> 3
+          <br>
         </div>
       </div>
     </ul>
-    <button>Submit</button>
+    <!-- <button @click="submitAnswer">Submit</button> -->
+    <button @click="submitAnswer">Submit</button>
+    <!-- <button v-if="allAnswered" @click="submitAnswer">Submit</button> -->
   </div>
 </template>
 
@@ -20,8 +25,18 @@ import axios from "axios";
 export default {
   data() {
     return {
-      questions: []
+        
+      questions: [],
+      answers: []
     };
+  },
+  computed: {
+    allAnswered() {
+      return (
+        this.answers.filter(answer => answer.answer).length ===
+        this.questions.length
+      );
+    }
   },
   mounted() {
     axios({
@@ -37,15 +52,24 @@ export default {
       .then(response => {
         // console.log(response.data.questions);
         this.questions.push(...response.data.questions);
+        this.answers = this.questions.map(question => {
+          return {
+            question,
+            answer: null
+          };
+        });
       })
       .catch(e => {
         console.log(e);
       });
   },
   methods: {
-      selectAnswer(e) {
-          console.log(e.target.value)
-      }
+    submitAnswer() {
+        if( this.answers.filter(answer => answer.answer).length !=this.questions.length) {
+            return alert('Incomplete answers');
+        }
+      this.$router.push("/successful");
+    }
   }
 };
 </script>

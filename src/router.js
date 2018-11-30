@@ -11,17 +11,17 @@ export default new Router({
   routes: [
     {
       path: "/",
-      // name: 'home',
+      name: 'home',
       component: Home
     },
     {
       path: "/questions",
-      // name: 'question',
+      name: 'question',
       component: Question
     },
     {
       path: "/successful",
-      // name: 'successful',
+      name: 'successful',
       component: Successful
     }
   ]
