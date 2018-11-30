@@ -2,14 +2,16 @@
   <div>
     <h1>The Questions page</h1>
     <ul li v-for="(question, index) in questions" :key="index">
-      <li>{{ question }}</li>
-
-         <button>1</button>
-          <button>2</button>
-          <button>3</button>
+      <div>
+        {{question }}
+        <div @click='selectAnswer'>
+          <button value='1'>1</button>
+          <button value='2'>2</button>
+          <button value='3'>3</button>
+        </div>
+      </div>
     </ul>
-    
-    <button @click="checkAnswer">Submit</button>
+    <button>Submit</button>
   </div>
 </template>
 
@@ -34,19 +36,16 @@ export default {
     })
       .then(response => {
         // console.log(response.data.questions);
-        this.questions.push(response.data.questions);
+        this.questions.push(...response.data.questions);
       })
       .catch(e => {
         console.log(e);
       });
   },
   methods: {
-      selectAnswer() {
-          console.log('jjeje')
+      selectAnswer(e) {
+          console.log(e.target.value)
       }
-  },
-  checkAnswer() {
-      console.log('jej')
   }
 };
 </script>
