@@ -3,20 +3,38 @@
     <h1>The Questions page</h1>
     <ul li v-for="(question, index) in questions" :key="index">
       <div>
-        {{question }}
+        <span :class="{
+          missing: question.needsAttention
+        }">{{question.text }}</span>
         <div>
-          <input type="radio" :name="question" value="1" v-model="answers[index].answer"> 1
+          <input
+            type="radio"
+            :name="question.text"
+            value="1"
+            v-model="question.answer"
+            @change="resetQuestion(question)"
+          > 1
           <br>
-          <input type="radio" :name="question" value="2" v-model="answers[index].answer"> 2
+          <input
+            type="radio"
+            :name="question.text"
+            value="2"
+            v-model="question.answer"
+            @change="resetQuestion(question)"
+          > 2
           <br>
-          <input type="radio" :name="question" value="3" v-model="answers[index].answer"> 3
+          <input
+            type="radio"
+            :name="question.text"
+            value="3"
+            v-model="question.answer"
+            @change="resetQuestion(question)"
+          > 3
           <br>
         </div>
       </div>
     </ul>
-    <!-- <button @click="submitAnswer">Submit</button> -->
-    <button @click="submitAnswer">Submit</button>
-    <!-- <button v-if="allAnswered" @click="submitAnswer">Submit</button> -->
+    <button @click="checkAndSubmit">Submit</button>
   </div>
 </template>
 
@@ -25,20 +43,15 @@ import axios from "axios";
 export default {
   data() {
     return {
-        
-      questions: [],
-      answers: []
+      questions: []
     };
   },
   computed: {
     allAnswered() {
-      return (
-        this.answers.filter(answer => answer.answer).length ===
-        this.questions.length
-      );
+      return this.questions.every(answer => answer.answer);
     }
   },
-  mounted() {
+  created() {
     axios({
       method: "GET",
       url: "http://test.natterbase.com:3002/questions",
@@ -51,11 +64,11 @@ export default {
     })
       .then(response => {
         // console.log(response.data.questions);
-        this.questions.push(...response.data.questions);
-        this.answers = this.questions.map(question => {
+        this.questions = response.data.questions.map(question => {
           return {
-            question,
-            answer: null
+            text: question,
+            answer: null,
+            needsAttention: false
           };
         });
       })
@@ -64,15 +77,28 @@ export default {
       });
   },
   methods: {
-    submitAnswer() {
-        if( this.answers.filter(answer => answer.answer).length !=this.questions.length) {
-            return alert('Incomplete answers');
-        }
-      this.$router.push("/successful");
+    resetQuestion(question) {
+      question.needsAttention = false;
+    },
+    checkAndSubmit() {
+      if (!this.allAnswered) {
+          alert(`You have unanswered questions`);
+          this.questions = this.questions.map(question => {
+              return {
+                  ...question,
+            needsAttention: question.answer ? false : true
+          };
+        });
+      } else {
+        alert("ALL GOOD SO SEND!");
+      }
     }
   }
 };
 </script>
 
 <style>
+.missing {
+  color: red;
+}
 </style>
