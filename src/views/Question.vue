@@ -90,7 +90,7 @@ export default {
           };
         });
       } else {
-        alert("ALL GOOD SO SEND!");
+        this.$router.push('/successful');
       }
     }
   }
