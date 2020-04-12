@@ -1,4 +1,6 @@
-# vue-test
+# vue-test-natterbase
+
+An interview code test done foe Natterbase.
 
 To run app:
 - Clone the project from github: `git clone https://github.com/peoray/vue-test.git`
