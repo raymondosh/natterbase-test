@@ -1,4 +1,4 @@
-# vue-test-natterbase
+# natterbase-test
 
 An interview code test done foe Natterbase.
 
